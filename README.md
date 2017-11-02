@@ -14,11 +14,6 @@ Local server
 - Node.js
 - Sails.js
 
-## Contributors
-
-- [Brandy Lee Camacho - Technical Project Manager](mailto:brandy.camacho@udacity.com)
-- [David Harris - Web Services Lead](mailto:david.harris@udacity.com)
-- [Omar Albeik - Frontend engineer](mailto:omaralbeik@gmail.com)
 
 ## Getting Started
 
@@ -43,10 +38,17 @@ Let's start with running commands in your terminal, known as command line interf
 ```Start server
 # node server
 ```
-### You should now have access to your API server environment
-debug: Environment : development
-debug: Port        : 1337
+### You should now have access to your API server environment via port `1337`
 
+
+## Contributors
+
+- [Brandy Lee Camacho - Technical Project Manager](mailto:brandy.camacho@udacity.com)
+- [David Harris - Web Services Lead](mailto:david.harris@udacity.com)
+- [Omar Albeik - Frontend engineer](https://github.com/omaralbeik)
+
+
+## Contributing
 
 If you find a bug in the source code or a mistake in the documentation, you can help us by
 submitting an issue to our [Waffle Dashboard](https://waffle.io/udacity/mwnd-issues). Even better you can submit a Pull Request with a fix :)
