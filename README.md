@@ -31,8 +31,8 @@ Great, you are ready to proceed forward; awesome!
 
 Let's start with running commands in your terminal, known as command line interface (CLI)
 
-###### Install project dependancies
-```Install project dependancies
+###### Install project dependencies
+```Install project dependencies
 # npm i
 ```
 ###### Install Sails.js globally
