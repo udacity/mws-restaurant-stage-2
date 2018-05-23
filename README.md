@@ -50,3 +50,26 @@ debug: Port        : 1337
 
 If you find a bug in the source code or a mistake in the documentation, you can help us by
 submitting an issue to our [Waffle Dashboard](https://waffle.io/udacity/mwnd-issues). Even better you can submit a Pull Request with a fix :)
+
+
+### Development local Docker image
+
+Given that you have [Docker](https://www.docker.com) installed on your local system.
+You can build a image of this source with the expected server versions for node.js and sails.js version.
+
+
+Open your terminal and navigate into the folder that contains this source code. 
+###### Build local Docker image
+This command builds a new image named mws-server from the current directory.
+```
+docker build -t mws-server .
+```
+
+
+###### Start the server
+Starts image named mws-server and exposes port 1337 outside the container.
+```
+docker run -p 1337:1337 mws-server
+```
+
+You should now have access to the server and be able to issue HTTP requests against the API.
