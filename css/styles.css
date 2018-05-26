@@ -234,7 +234,6 @@ nav h1 a {
   background-color: #7d4f00;
   border-bottom: 3px solid #eee;
   color: #fff;
-  display: inline-block;
   font-size: 10pt;
   margin: 15px 0 0;
   padding: 8px 30px 10px;
@@ -352,7 +351,11 @@ nav h1 a {
 }
 
 /* ====================== Media and property queries ====================== */
-
+@supports (display: flex) {
+  #restaurants-list li a {
+    align-self: end;
+  }
+}
 @supports (display: grid) {
   #restaurants-list { background-color: magenta;
     display: grid;
@@ -361,6 +364,7 @@ nav h1 a {
   }
   #restaurants-list li {
     margin: 0;
+    display: inline-grid;
   }
 }
 @media (min-width: 500px) {
