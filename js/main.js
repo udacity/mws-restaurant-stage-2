@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   fetchNeighborhoods();
   fetchCuisines();
   registerServiceWorker();
+  document.querySelector('nav h1').focus();
 });
 
 /**
@@ -152,6 +153,7 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
  * Create restaurant HTML.
  */
 createRestaurantHTML = (restaurant) => {
+  const href = DBHelper.urlForRestaurant(restaurant);
   const li = document.createElement('li');
 
   const image = document.createElement('img');
@@ -161,8 +163,11 @@ createRestaurantHTML = (restaurant) => {
   li.append(image);
 
   const name = document.createElement('h1');
+  const nameLink = document.createElement('a');
+  nameLink.href = href;
   name.innerHTML = restaurant.name;
-  li.append(name);
+  nameLink.append(name);
+  li.append(nameLink);
 
   const neighborhood = document.createElement('p');
   neighborhood.innerHTML = restaurant.neighborhood;
@@ -174,7 +179,7 @@ createRestaurantHTML = (restaurant) => {
 
   const more = document.createElement('a');
   more.innerHTML = 'View Details';
-  more.href = DBHelper.urlForRestaurant(restaurant);
+  more.href = href;
   li.append(more);
 
   return li;

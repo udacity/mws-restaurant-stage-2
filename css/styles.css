@@ -229,7 +229,7 @@ nav h1 a {
   font-size: 11pt;
 }
 
-#restaurants-list li a {
+#restaurants-list li a:last-of-type {
   background-color: #7d4f00;
   border-bottom: 3px solid #eee;
   color: #fff;
@@ -379,6 +379,7 @@ nav h1 a {
     .inside #restaurant-container,
     .inside #reviews-container {
       grid-column: 1;
+      margin-top: 120px;
     }
    
     .inside #map-container {
