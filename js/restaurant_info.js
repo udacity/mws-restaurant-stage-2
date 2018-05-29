@@ -44,24 +44,42 @@ fetchRestaurantFromURL = (callback) => {
     });
   }
 };
+/** 
+ * Create restaurant image(s).
+ */
+createRestaurantImages = (restaurant) => {
+   /* default image; the largest */
+   const image = document.createElement('img');
+   image.id = 'restaurant-img';
+   image.src = DBHelper.imageUrlForRestaurant(restaurant);
+   image.setAttribute('alt', restaurant.name);
 
+  const picture = document.createElement('picture');
+  picture.innerHTML = `
+    <source media="(max-width: 500px)" srcset="resizes/${restaurant.id}-thumb.jpg">
+    <source media="(min-width: 501px) and (max-width: 600px") srcset="resizes/${restaurant.id}-small.jpg">
+  `;
+  picture.append(image);
+  return picture;
+};
 /**
  * Create restaurant HTML and add it to the webpage
  */
 fillRestaurantHTML = (restaurant = self.restaurant) => {
+  const container = document.getElementById('restaurant-container');
   const name = document.getElementById('restaurant-name');
   name.innerHTML = restaurant.name;
 
   const address = document.getElementById('restaurant-address');
   address.innerHTML = restaurant.address;
 
-  const image = document.getElementById('restaurant-img');
-  image.className = 'restaurant-img';
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
-  image.setAttribute('alt', restaurant.name);
+  const picture = createRestaurantImages(restaurant);
 
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.innerHTML = restaurant.cuisine_type;
+
+  container.insertBefore(picture, cuisine);
+
   // fill operating hours
   if (restaurant.operating_hours) {
     fillRestaurantHoursHTML();
