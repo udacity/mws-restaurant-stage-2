@@ -155,12 +155,8 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
 createRestaurantHTML = (restaurant) => {
   const href = DBHelper.urlForRestaurant(restaurant);
   const li = document.createElement('li');
-
-  const image = document.createElement('img');
-  image.className = 'restaurant-img';
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
-  image.setAttribute('alt', restaurant.name);
-  li.append(image);
+  const picture = createRestaurantImages(restaurant);
+  li.append(picture);
 
   const name = document.createElement('h1');
   const nameLink = document.createElement('a');
@@ -184,7 +180,26 @@ createRestaurantHTML = (restaurant) => {
 
   return li;
 };
-
+/** 
+ * Create restaurant image(s).
+ */
+createRestaurantImages = (restaurant) => {
+   /* default image; the largest */
+   const image = document.createElement('img');
+   image.className = 'restaurant-img';
+   image.src = DBHelper.imageUrlForRestaurant(restaurant);
+   image.setAttribute('alt', restaurant.name);
+  /* When the viewport permits a grid of several items 
+    placed horizontally, use the *smaller* image
+  */
+  const picture = document.createElement('picture');
+  picture.innerHTML = `
+    <source media="(min-width: 585px)" srcset="resizes/${restaurant.id}-thumb.jpg">
+    <source media="(max-width: 584px") srcset="resizes/${restaurant.id}-small.jpg">
+  `;
+  picture.append(image);
+  return picture;
+};
 /**
  * Add markers for current restaurants to the map.
  */
