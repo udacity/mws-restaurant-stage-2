@@ -11,24 +11,47 @@ var contentCache = [
   '../css/normalize.css',
   '../data/restaurants.json'
 ];
-var imagesCacheName = 'content-images';
+var staticCacheName = 'stage-1-restaurants';
+var imagesCacheName = 'stage-1-content-images';
+var allCaches = [
+  staticCacheName,
+  imagesCacheName
+];
 
+// open or create cache for static assets
 self.addEventListener('install', event => {
-
   event.waitUntil(
-    caches.open('restaurants').then(cache => {
+    caches.open(staticCacheName).then(cache => {
       return cache.addAll(contentCache);
     })
   );
 });
-// response with cached elements
+
+// Filtering for the appropriate caches,
+// checking whether they're already extant
+self.addEventListener('activate', event => {
+  caches.keys().then(cacheNames => {
+    return Promise.all(
+      cacheNames.filter(cacheName => {
+        return cacheName.startsWith('stage-1-') &&
+          !allCaches.includes(cacheName);
+      }).map(cacheName => {
+        return caches.delete(cacheName);
+      })
+    );
+  })
+});
+
+// response with cached elements. Image 
+// requests are intercepted and handled differently.
 self.addEventListener('fetch', event => {
-  let requestUrl = new URL(event.request.url);
-  // if (requestUrl.origin === location.origin) {
-    if (requestUrl.pathname.startsWith('/img')) {
+  var requestUrl = new URL(event.request.url);
+  if (requestUrl.origin === location.origin) {
+    if (requestUrl.pathname.startsWith('/img/')) {
       event.respondWith(serveImage(event.request));
+      return;
     }
-  // }
+  }
 
   event.respondWith(
     caches.match(event.request).then(response => {
@@ -37,17 +60,21 @@ self.addEventListener('fetch', event => {
   );
 });
 
+// Use caching to respond to image requests.
+// If the image's pathname is stored, return it
+// from cache. Otherwise, request the pathname from the
+// network, and store a clone of it in the cache, and 
+// proceed with the original request.
 const serveImage = request => {
   let storageUrl = request.url.replace(/\.jpg$/, '');
 
   return caches.open(imagesCacheName).then(cache => {
     return cache.match(storageUrl).then(response => {
-      if (response) return response;
-
-      return fetch(request).then(networkResponse => {
+      let networkFetch = fetch(request).then(networkResponse => {
         cache.put(storageUrl, networkResponse.clone());
         return networkResponse;
       });
+      return response || networkFetch;
     });
   });
 };
