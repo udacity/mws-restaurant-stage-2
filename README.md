@@ -23,7 +23,7 @@ and then
 grunt
 ```
 to complete installation.
-* Now, start an HTTP server on your local computer. One method is to use a simple Python tool that you probaby already have installed on your computer. Try the following:
+* Now, start an HTTP server on your local computer. One method is to use a simple Python tool that you probably already have installed on your computer. Try the following:
 
     * In a console or terminal, check the version of Python you have: 
   ```shell
