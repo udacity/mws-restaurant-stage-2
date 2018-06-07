@@ -17,7 +17,11 @@ In **Stage One**, the enhancements include:
 * In a console or terminal, go to the folder on your local computer where you have placed the code, and type
 ```shell
 npm install
-``` 
+```
+and then
+```shell
+grunt
+```
 to complete installation.
 * Now, start an HTTP server on your local computer. One method is to use a simple Python tool that you probaby already have installed on your computer. Try the following:
 
