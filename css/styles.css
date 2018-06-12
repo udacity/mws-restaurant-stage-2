@@ -121,7 +121,6 @@ nav h1 a {
   background-color: #eee;
   font-size: 17px;
   margin: 0;
-  width: calc;
 }
 
 /* Display list items side by side */
@@ -168,7 +167,8 @@ nav h1 a {
   padding-top: .65em;
 }
 
-.filter-options h2 {
+.filter-options h2,
+.filter-options h3 {
   color: white;
   font-size: 1rem;
   font-weight: normal;
@@ -373,7 +373,9 @@ nav h1 a {
 
 @media (min-width: 585px) {
   #breadcrumb {
-    width: calc(50% - 80px);
+    width: calc(50% - 79px);
+    margin-top: 41px;
+    text-align: left;
   }
   @supports (display: grid) {
     .inside #maincontent {
