@@ -53,7 +53,7 @@ function styles() {
   .pipe(gulp.dest(paths.styles.dest));
 }
 
-// concatentate JS; copy to /dist/js; TODO: minify
+// transpile JS; concatentate; minify; copy to /dist/js
 function scripts() {
   return gulp.src(paths.scripts.src)
   .pipe(sourcemaps.init())
