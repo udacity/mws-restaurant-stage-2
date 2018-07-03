@@ -1,3 +1,5 @@
+import idb from 'idb';
+
 var contentCache = [
   '/',
   '../index.html',
@@ -7,8 +9,8 @@ var contentCache = [
   './dbhelper.js',
   '../favicon.ico',
   '../favicon-16x16.png',
-  '../css/styles.css',
-  '../css/normalize.css',
+  './css/styles.css',
+  './css/normalize.css',
   '../data/restaurants.json'
 ];
 var staticCacheName = 'stage-1-restaurants';

@@ -56,8 +56,8 @@ createRestaurantImages = (restaurant) => {
 
   const picture = document.createElement('picture');
   picture.innerHTML = `
-    <source media="(max-width: 500px)" srcset="img/${restaurant.id}-thumb.jpg">
-    <source media="(min-width: 501px) and (max-width: 600px") srcset="img/${restaurant.id}-small.jpg">
+    <source media="(max-width: 500px)" srcset="src/img/${restaurant.id}-thumb.jpg">
+    <source media="(min-width: 501px) and (max-width: 600px") srcset="src/img/${restaurant.id}-small.jpg">
   `;
   picture.append(image);
   return picture;
