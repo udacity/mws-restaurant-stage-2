@@ -1,18 +1,18 @@
 # Mobile Web Specialist Certification Course
 ---
-## _Three Stage Course Material Project - Restaurant Reviews: Stage 1_
+## _Three Stage Course Material Project - Restaurant Reviews: Stage 2_
 
-Developed by [Melanie Archer](https://github.com/mejarc/mws-restaurant-stage-1.git).
+Developed by [Melanie Archer](https://github.com/mejarc/mws-restaurant-stage-2.git).
 
 A static webpage incrementally converted to a mobile-ready web application.
 
-In **Stage One**, the enhancements include:
+In **Stage One**, the enhancements included:
 * conversion to responsive design
 * screen reader accessibility features
 * adding a service worker to cache content.
 
 ### Installation and usage
-* [Clone or download the code repo](https://github.com/mejarc/mws-restaurant-stage-1.git)
+* [Clone or download the code repo](https://github.com/mejarc/mws-restaurant-stage-2.git)
 
 * In a console or terminal, go to the folder on your local computer where you have placed the code, and type
 ```shell
