@@ -12,7 +12,7 @@ class DBHelper {
   }
 
   static fetchError(err, asset) {
-    console.log(`ERROR (${err}) when attempting to fetch ${asset}`);
+    console.error(`ERROR (${err}) when attempting to fetch ${asset}`);
   }
   /**
    * Fetch all restaurants.
@@ -28,6 +28,8 @@ class DBHelper {
     fetch(assetUrl, { method: 'GET'})
       .then(response => response.json())
       .then(data => {
+        // store in local DB
+        DBHelper.createDb(data);
         callback(null, data);
       })
       .catch(err => DBHelper.fetchError(err, 'restaurant data'));
@@ -141,7 +143,7 @@ class DBHelper {
   }
 
   /**
-   * Restaurant page URL. TODO: reconcile with API?
+   * Restaurant page URL.
    */
   static urlForRestaurant(restaurant) {
     return (`./restaurant.html?id=${restaurant.id}`);
@@ -168,4 +170,38 @@ class DBHelper {
     return marker;
   }
 
+  /**
+   * Create local database, save restaurant
+   * data as store.
+   */
+  static createDb(restaurants) {
+    let idb = indexedDB.open('RestaurantDB', 2);
+
+    idb.onerror = error => {
+      console.error(`ERROR (${error}) when trying to create database.`);
+    };
+
+    idb.onupgradeneeded = () => {
+      let db = idb.result;
+      let store = db.createObjectStore('RestaurantStore', { keyPath: 'id'});
+      let index = store.createIndex('byId', 'id');
+    };
+
+    idb.onsuccess = () => {
+      let db = idb.result;
+      let tx = db.transaction('RestaurantStore', 'readwrite');
+      let store = tx.objectStore('RestaurantStore');
+      let index = store.index('byId');
+
+      // take data and place into store
+      restaurants.forEach(restaurant => {
+        store.put(restaurant);
+      });
+      // transaction is done.
+      tx.oncomplete = () => {
+        db.close();
+      };
+    }
+
+  }
 }

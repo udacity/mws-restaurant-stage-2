@@ -1,4 +1,3 @@
-import idb from 'idb';
 
 var contentCache = [
   '/',
