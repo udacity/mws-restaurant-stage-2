@@ -38,11 +38,12 @@ class DBHelper {
         DBHelper.createDb(data);
         callback(null, data);
       })
-      .catch(() => {
+      .catch(error => {
           // if offline, use DB data
-          DBHelper.getDbData(data => {
+          DBHelper.getDbData((error, data) => {
             callback(null, data);
           });
+          DBHelper.fetchError(error, 'restaurant data');
       });
 }
 /**
