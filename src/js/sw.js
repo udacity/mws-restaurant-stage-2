@@ -1,4 +1,3 @@
-import idb from 'idb';
 
 var contentCache = [
   '/',
@@ -9,12 +8,11 @@ var contentCache = [
   './dbhelper.js',
   '../favicon.ico',
   '../favicon-16x16.png',
-  './css/styles.css',
-  './css/normalize.css',
-  '../data/restaurants.json'
+  '../css/styles.css',
+  '../css/normalize.css'
 ];
-var staticCacheName = 'stage-1-restaurants';
-var imagesCacheName = 'stage-1-content-images';
+var staticCacheName = 'stage-2-restaurants';
+var imagesCacheName = 'stage-2-content-images';
 var allCaches = [
   staticCacheName,
   imagesCacheName
@@ -35,7 +33,7 @@ self.addEventListener('activate', event => {
   caches.keys().then(cacheNames => {
     return Promise.all(
       cacheNames.filter(cacheName => {
-        return cacheName.startsWith('stage-1-') &&
+        return cacheName.startsWith('stage-2-') &&
           !allCaches.includes(cacheName);
       }).map(cacheName => {
         return caches.delete(cacheName);
