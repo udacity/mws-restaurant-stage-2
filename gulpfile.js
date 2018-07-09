@@ -5,13 +5,13 @@ var useref = require('gulp-useref');
 var del = require('del');
 var babel = require('gulp-babel');
 var uglify = require('gulp-uglify');
-
+var imagemin = require('gulp-imagemin');
 // var gutil = require('gulp-util');
-var browserSync = require('browser-sync').create();
-var webpack = require('webpack');
-var WebpackDevServer = require('webpack-dev-server');
-var webpackConfig = require('./webpack.config.js');
-var stream = require('webpack-stream');
+// var browserSync = require('browser-sync').create();
+// var webpack = require('webpack');
+// var WebpackDevServer = require('webpack-dev-server');
+// var webpackConfig = require('./webpack.config.js');
+// var stream = require('webpack-stream');
  
 var paths = {
   styles: {
@@ -72,9 +72,12 @@ function html() {
   .pipe(gulp.dest(paths.html.dest));
 }
 
-// copy /img to /dist
+// compress images; copy /img to /dist
 function images() {
   return (gulp.src(paths.images.src))
+  .pipe(imagemin([
+      imagemin.jpegtran({ progressive: true })
+  ]))
   .pipe(gulp.dest(paths.images.dest));
 }
 

@@ -25,6 +25,7 @@
     "gulp-babel": "^8.0.0-beta.2",
     "gulp-concat": "^2.6.1",
     "gulp-grunt": "^0.5.5",
+    "gulp-imagemin": "^4.1.0",
     "gulp-sourcemaps": "^2.6.4",
     "gulp-uglify": "^3.0.0",
     "gulp-useref": "^3.1.5",
