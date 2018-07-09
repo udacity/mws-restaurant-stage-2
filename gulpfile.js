@@ -80,12 +80,23 @@ function images() {
   ]))
   .pipe(gulp.dest(paths.images.dest));
 }
+// copy other assets to /dist
+function assets() {
+  let files = [
+    'src/manifest.json',
+    'src/favicon*.*',
+    'src/icons*.*'
+  ];
+  return (gulp.src(files, { base: 'src/'}))
+  .pipe(gulp.dest(paths.html.dest))
+}
 
 exports.clean = clean;
 exports.styles = styles;
 exports.scripts = scripts;
 exports.html = html;
 exports.images = images;
+exports.assets = assets;
 
 
 gulp.task('useref', () => {

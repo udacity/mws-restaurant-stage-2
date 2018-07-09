@@ -1,0 +1,20 @@
+{
+  "short_name": "Reviews 2",
+  "name": "Restaurant Reviews, Stage 2",
+  "icons": [
+    {
+      "src": "icons-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icons-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "index.html",
+  "background_color": "#f3f3f3",
+  "theme_color": "#005e8f",
+  "display": "standalone"
+}
