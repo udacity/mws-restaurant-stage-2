@@ -49,38 +49,43 @@ function clean() {
 // concatentate CSS; copy to /dist/css; TODO: minify
 function styles() {
   return (gulp.src(paths.styles.src))
-  .pipe(concat('all.min.css'))
-  .pipe(gulp.dest(paths.styles.dest));
+    .pipe(concat('all.min.css'))
+    .pipe(gulp.dest(paths.styles.dest));
 }
 
 // transpile JS; concatentate; minify; copy to /dist/js
 function scripts() {
   return gulp.src(paths.scripts.src)
-  .pipe(sourcemaps.init())
-  .pipe(babel({
-    presets: ['@babel/env']
-  }))
-  .pipe(concat('all.min.js'))
-  .pipe(uglify())
-  .pipe(sourcemaps.write('.'))
-  .pipe(gulp.dest(paths.scripts.dest));
+    .pipe(sourcemaps.init())
+    .pipe(babel({
+      presets: ['@babel/env']
+    }))
+    .pipe(concat('all.min.js'))
+    .pipe(uglify())
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest(paths.scripts.dest));
 }
 // copy HTML to /dist; change script and CSS links
 function html() {
   return (gulp.src(paths.html.src))
-  .pipe(useref())
-  .pipe(gulp.dest(paths.html.dest));
+    .pipe(useref())
+    .pipe(gulp.dest(paths.html.dest));
 }
 
 // compress images; copy /img to /dist
 function images() {
   return (gulp.src(paths.images.src))
-  .pipe(imagemin([
+    .pipe(imagemin([
+      imagemin.optipng({ optimizationLevel: 5 }),
       imagemin.jpegtran({ progressive: true })
-  ]))
-  .pipe(gulp.dest(paths.images.dest));
+    ], {
+      verbose: true
+    }   
+    ))
+    .pipe(gulp.dest(paths.images.dest));
 }
-// copy other assets to /dist
+
+// compress and copy other assets to /dist
 function assets() {
   let files = [
     'src/manifest.json',
@@ -88,7 +93,13 @@ function assets() {
     'src/icons*.*'
   ];
   return (gulp.src(files, { base: 'src/'}))
-  .pipe(gulp.dest(paths.html.dest))
+    .pipe(imagemin([
+      imagemin.optipng({ optimizationLevel: 5 })
+    ], {
+      verbose: true
+    } 
+    ))
+    .pipe(gulp.dest(paths.html.dest));
 }
 
 exports.clean = clean;
@@ -101,9 +112,9 @@ exports.assets = assets;
 
 gulp.task('useref', () => {
   return gulp.src(paths.html.src)
-  .pipe(useref())
-  .pipe(uglify())
-  .pipe(gulp.dest(paths.html.dest))
+    .pipe(useref())
+    .pipe(uglify())
+    .pipe(gulp.dest(paths.html.dest))
 });
 
 
