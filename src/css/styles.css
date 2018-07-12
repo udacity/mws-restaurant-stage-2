@@ -253,10 +253,6 @@ nav h1 a {
   z-index: 1000;
 }
 
-.inside #map-container {
-  background: blue none repeat scroll 0 0;
-}
-
 .inside #footer {
   bottom: 0;
   position: absolute;
