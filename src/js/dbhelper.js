@@ -16,7 +16,7 @@ class DBHelper {
     return `http://localhost:${port}/restaurants`;
   }
   static get DATABASE_VERSION() {
-    return 6;
+    return 1;
   }
 
   static fetchError(err, asset) {
@@ -31,10 +31,15 @@ class DBHelper {
       })
       .then(response => response.json())
       .then(data => {
+        // take network data and store in local DB
+        DBHelper.createDb(data);
         callback(null, data);
       })
       .catch(error => {
-          DBHelper.fetchError(error, 'restaurant data');
+        // if offline, use DB data
+          DBHelper.getDbData((result) => {
+            callback(null, result);
+          });
       });
   }
   /**
@@ -42,10 +47,10 @@ class DBHelper {
    */
   static fetchRestaurantById(id, callback) {
     // fetch all restaurants with proper error handling.
-    DBHelper.fetchRestaurants((error, restaurants) => {
-      if (error) {
-        callback(error, null);
-      } else {
+    try {
+      let restaurants = DBHelper.fetchRestaurants();
+      console.log(`restaurants: ${restaurants}`);
+      if (restaurants) {
         const restaurant = restaurants.find(r => r.id == id);
         if (restaurant) { // Got the restaurant
           callback(null, restaurant);
@@ -53,7 +58,9 @@ class DBHelper {
           callback('Restaurant does not exist', null);
         }
       }
-    });
+    } catch (error) {
+      DBHelper.fetchError(error, 'a restaurant by ID');
+    }
   }
 
   /**
@@ -171,5 +178,64 @@ class DBHelper {
       animation: google.maps.Animation.DROP
     });
     return marker;
+  }
+
+  /**
+   * Create local database, save restaurant
+   * data as store.
+   */
+  static createDb(restaurants) {
+    let idb = indexedDB.open(DBHelper.REST_DB, DBHelper.DATABASE_VERSION);
+
+    idb.onerror = error => {
+      console.error(`ERROR (${error}) when trying to create database.`);
+    };
+
+    idb.onupgradeneeded = () => {
+      let db = idb.result;
+      let store = db.createObjectStore(DBHelper.REST_STORE, {
+        keyPath: 'id'
+      });
+      let index = store.createIndex('byId', 'id');
+    };
+
+    idb.onsuccess = () => {
+      let db = idb.result;
+      let tx = db.transaction(DBHelper.REST_STORE, 'readwrite');
+      let store = tx.objectStore(DBHelper.REST_STORE);
+      let index = store.index('byId');
+
+      // take data and place into store
+      restaurants.forEach(restaurant => {
+        store.put(restaurant);
+      });
+      // transaction is done.
+      tx.oncomplete = () => {
+        db.close();
+      };
+    };
+
+  }
+  /**
+   * Retrieve data from database.
+   */
+  static getDbData() {
+    let idb = indexedDB.open(DBHelper.REST_DB);
+    idb.onerror = error => {
+      console.error(`ERROR (${error}) when trying to open database.`);
+    };
+    idb.onsuccess = () => {
+      let db = idb.result;
+      let tx = db.transaction(DBHelper.REST_STORE, 'readwrite');
+      let store = tx.objectStore(DBHelper.REST_STORE);
+      let data = store.getAll();
+      data.onsuccess = () => {
+        return data.result;
+      };
+      // transaction is done.
+      tx.oncomplete = () => {
+        db.close();
+      };
+    }
   }
 }
