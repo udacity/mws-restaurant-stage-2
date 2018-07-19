@@ -26,6 +26,44 @@ class DBHelper {
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
+    // Approach #1; does NOT return data, 
+    // though the database is created and stores
+    // the data.
+
+    // Try the database first.
+    // If the data are there, return that--
+    // use getDBData() (line 210+) to retrieve all 
+    // records from the database.
+    // If the data are not stored, fetch from network,
+    // create DB with the returned data.
+
+    // return DBHelper.getDbData()
+    //   .then(response => {
+    //     let networkFetch = fetch(DBHelper.DATABASE_URL, {
+    //         method: 'GET'
+    //       })
+    //       .then(networkResponse => networkResponse.json())
+    //       .then(data => {
+    //         // take network data and store in local DB
+    //         DBHelper.createDb(data.clone());
+    //         return data;
+    //       });
+
+    //       return callback(null, response) || callback(null, networkFetch);
+    //   });
+    // }
+
+    // )
+    // Approach #2: limited success.
+    // Fetch data first. Create a database with
+    // it.
+    // If there's a problem with fetching,
+    // check the database for the request,
+    // and return it if it's there.
+    // What works: fetching all restaurants, retrieving all
+    // restaurants when offline.
+    // What does NOT work: finding/filtering on the 
+    // database request, which is an Array of objects.
     fetch(DBHelper.DATABASE_URL, {
         method: 'GET'
       })
@@ -37,9 +75,9 @@ class DBHelper {
       })
       .catch(error => {
         // if offline, use DB data
-          DBHelper.getDbData((result) => {
-            callback(null, result);
-          });
+        DBHelper.getDbData((error, data) => {
+          callback(null, data);
+        });
       });
   }
   /**
@@ -47,10 +85,10 @@ class DBHelper {
    */
   static fetchRestaurantById(id, callback) {
     // fetch all restaurants with proper error handling.
-    try {
-      let restaurants = DBHelper.fetchRestaurants();
-      console.log(`restaurants: ${restaurants}`);
-      if (restaurants) {
+    DBHelper.fetchRestaurants((error, restaurants) => {
+      if (error) {
+        callback(error, null);
+      } else {
         const restaurant = restaurants.find(r => r.id == id);
         if (restaurant) { // Got the restaurant
           callback(null, restaurant);
@@ -58,9 +96,7 @@ class DBHelper {
           callback('Restaurant does not exist', null);
         }
       }
-    } catch (error) {
-      DBHelper.fetchError(error, 'a restaurant by ID');
-    }
+    });
   }
 
   /**
@@ -236,6 +272,6 @@ class DBHelper {
       tx.oncomplete = () => {
         db.close();
       };
-    }
+    };
   }
 }

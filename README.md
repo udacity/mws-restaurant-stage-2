@@ -14,7 +14,7 @@ In **Stage One**, the enhancements included:
 ### Installation and usage
 * [Clone or download the data client repo](https://github.com/mejarc/mws-restaurant-stage-2.git)
 
-*In a console or terminal, go to the folder on your local computer where you have placed the code, and type
+* In a console or terminal, go to the folder on your local computer where you have placed the code, and type
 
 ```shell
 npm install
