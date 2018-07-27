@@ -26,59 +26,29 @@ class DBHelper {
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
-    // Approach #1; does NOT return data, 
-    // though the database is created and stores
-    // the data.
-
-    // Try the database first.
+    // Try the browser-side database first.
     // If the data are there, return that--
-    // use getDBData() (line 210+) to retrieve all 
+    // use getDBData() to retrieve all 
     // records from the database.
-    // If the data are not stored, fetch from network,
-    // create DB with the returned data.
+    // If the data are not stored && the app server is available, 
+    // fetch from network and create DB with the returned data.
 
-    // return DBHelper.getDbData()
-    //   .then(response => {
-    //     let networkFetch = fetch(DBHelper.DATABASE_URL, {
-    //         method: 'GET'
-    //       })
-    //       .then(networkResponse => networkResponse.json())
-    //       .then(data => {
-    //         // take network data and store in local DB
-    //         DBHelper.createDb(data.clone());
-    //         return data;
-    //       });
-
-    //       return callback(null, response) || callback(null, networkFetch);
-    //   });
-    // }
-
-    // )
-    // Approach #2: limited success.
-    // Fetch data first. Create a database with
-    // it.
-    // If there's a problem with fetching,
-    // check the database for the request,
-    // and return it if it's there.
-    // What works: fetching all restaurants, retrieving all
-    // restaurants when offline.
-    // What does NOT work: finding/filtering on the 
-    // database request, which is an Array of objects.
-    fetch(DBHelper.DATABASE_URL, {
-        method: 'GET'
-      })
-      .then(response => response.json())
-      .then(data => {
-        // take network data and store in local DB
-        DBHelper.createDb(data);
-        callback(null, data);
-      })
-      .catch(error => {
-        // if offline, use DB data
-        DBHelper.getDbData((error, data) => {
-          callback(null, data);
+    DBHelper.getDbData(response => {
+      if (!response){
+      let networkFetch = fetch(DBHelper.DATABASE_URL, {
+          method: 'GET'
+        })
+        .then(networkResponse => networkResponse.json())
+        .then(data => {
+          // take fresh network data and store in local DB
+          DBHelper.createDb(data.clone());
+          return data;
         });
-      });
+        return callback(null, networkFetch);
+      }
+      return callback(null, response);
+    });
+  
   }
   /**
    * Fetch a restaurant by its ID.
@@ -255,22 +225,30 @@ class DBHelper {
   /**
    * Retrieve data from database.
    */
-  static getDbData() {
-    let idb = indexedDB.open(DBHelper.REST_DB);
+  static getDbData(callback) {
+    let idb = indexedDB.open(DBHelper.REST_DB, DBHelper.DATABASE_VERSION);
+
     idb.onerror = error => {
       console.error(`ERROR (${error}) when trying to open database.`);
     };
+
     idb.onsuccess = () => {
       let db = idb.result;
-      let tx = db.transaction(DBHelper.REST_STORE, 'readwrite');
+      let tx = db.transaction(DBHelper.REST_STORE, 'readonly');
       let store = tx.objectStore(DBHelper.REST_STORE);
-      let data = store.getAll();
-      data.onsuccess = () => {
-        return data.result;
+      let result = [];
+      tx.oncomplete = (e) => {
+        callback(result);
       };
-      // transaction is done.
-      tx.oncomplete = () => {
-        db.close();
+      // Obtain all stored data; iterate through it,
+      // push it to the array that's sent to fetchRestaurants()
+      let cursorRequest = store.openCursor();
+      cursorRequest.onsuccess = (e) => {
+        let cursor = e.target.result;
+        if (cursor) {
+          result.push(cursor.value);
+          cursor.continue();
+        }
       };
     };
   }

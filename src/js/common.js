@@ -3,9 +3,9 @@
  */
 const registerServiceWorker = () => {
   if (!navigator.serviceWorker) return;
-  navigator.serviceWorker.register('/js/sw.js')
+  navigator.serviceWorker.register('js/sw.js')
     .then(() => {
-      console.log('Service worker registered.');
+      console.log('Service worker is now registered.');
     })
     .catch((error) => {
       console.log(`Service worker did NOT register, because ${error}.`);
