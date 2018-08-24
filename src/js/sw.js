@@ -1,4 +1,3 @@
-
 var contentCache = [
   '/',
   '../index.html',
@@ -33,7 +32,7 @@ self.addEventListener('install', event => {
 
 // Filtering for the appropriate caches,
 // checking whether they're already extant
-self.addEventListener('activate', event => {
+self.addEventListener('activate', () => {
   caches.keys().then(cacheNames => {
     return Promise.all(
       cacheNames.filter(cacheName => {
@@ -43,19 +42,24 @@ self.addEventListener('activate', event => {
         return caches.delete(cacheName);
       })
     );
-  })
+  });
 });
 
-// response with cached elements. Image 
-// requests are intercepted and handled differently.
+// Response with cached elements. Image 
+// requests and request for the restaurant pages
+// are intercepted and handled differently.
 self.addEventListener('fetch', event => {
   var requestUrl = new URL(event.request.url);
   if (requestUrl.origin === location.origin) {
     if (requestUrl.pathname.startsWith('/img/')) {
       event.respondWith(serveImage(event.request));
       return;
+    } else if (requestUrl.pathname.endsWith('.html')) {
+      event.respondWith(DBHelper.fetchRestaurants(null));
+      return;
     }
   }
+
 
   event.respondWith(
     caches.match(event.request).then(response => {
