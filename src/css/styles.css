@@ -83,6 +83,9 @@ object {
   min-height: 100%;
   min-width: 100%;
 }
+#maincontent h2 {
+  color: #7f4200;
+}
 
 #footer {
   background-color: #444;
@@ -289,7 +292,8 @@ nav h1 a {
   padding: 2px 0;
   text-align: center;
   text-transform: uppercase;
-  width: 90%;
+  width: 100%;
+  max-width: 600px;
 }
 
 #restaurant-container,
@@ -357,7 +361,11 @@ nav h1 a {
     display: inline-grid;
   }
 }
-
+@media (max-width: 500px) {
+  #restaurant-cuisine {
+    max-width: 248px;
+  }
+}
 @media (min-width: 500px) {
   @supports (display: flex) {
     .filter-options {

@@ -3,12 +3,12 @@
  */
 const registerServiceWorker = () => {
   if (!navigator.serviceWorker) return;
-  navigator.serviceWorker.register('/js/sw.js')
+  navigator.serviceWorker.register('js/sw.js')
     .then(() => {
-      console.log('Service worker registered.');
+      console.log('Service worker is now registered.');
     })
-    .catch(() => {
-      console.log('Service worker did NOT register.');
+    .catch((error) => {
+      console.error(`Service worker did NOT register, because ${error}.`);
     });
 };
 
@@ -82,4 +82,4 @@ const initMaps = (format) => {
       });
     }
   );
-}
+};

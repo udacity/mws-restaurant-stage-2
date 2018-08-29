@@ -15,7 +15,7 @@ module.exports = function (grunt) {
               height: 248,
               name: 'thumb',
               quality: 85,
-              aspectRatio: false
+              aspectRatio: true
             },
             {
               width: 400,

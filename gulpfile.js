@@ -102,41 +102,53 @@ function assets() {
     .pipe(gulp.dest(paths.html.dest));
 }
 
+// TODO: make this work
+function build() {
+  return gulp.src(paths.html.src)
+  .pipe(clean)
+  .pipe(styles)
+  .pipe(scripts)
+  .pipe(html)
+  .pipe(images)
+  .pipe(assets)
+  .pipe(gulp.dest(paths.html.dest));
+}
+
+// Change paths to scripts in HTML files
+gulp.task('useref', () => {
+  return gulp.src(paths.html.src)
+    .pipe(useref())
+    .pipe(uglify())
+    .pipe(gulp.dest(paths.html.dest));
+});
+
 exports.clean = clean;
 exports.styles = styles;
 exports.scripts = scripts;
 exports.html = html;
 exports.images = images;
 exports.assets = assets;
+exports.build = build;
 
+// gulp.task('browserSync', () => {
+//   browserSync.init({
+//     server: {
+//       baseDir: 'src'
+//     }
+//   });
+// });
 
-gulp.task('useref', () => {
-  return gulp.src(paths.html.src)
-    .pipe(useref())
-    .pipe(uglify())
-    .pipe(gulp.dest(paths.html.dest))
-});
+// gulp.task('watch', ['browserSync'], () => {
+//   gulp.watch('src/js/**/*.js', browserSync.reload);
+//   gulp.watch('src/*.html', browserSync.reload);
+//   gulp.watch('src/css/**/*.css', browserSync.reload);
+// });
 
-
-gulp.task('browserSync', () => {
-  browserSync.init({
-    server: {
-      baseDir: 'src'
-    }
-  });
-});
-
-gulp.task('watch', ['browserSync'], () => {
-  gulp.watch('src/js/**/*.js', browserSync.reload);
-  gulp.watch('src/*.html', browserSync.reload);
-  gulp.watch('src/css/**/*.css', browserSync.reload);
-});
-
-gulp.task('webpack', [], () => {
-  return gulp.src(path.ALL)
-    .pipe(sourcemaps.init())
-    .pipe(stream(webpackConfig))
-    .pipe(uglify()) // minification
-    .pipe(sourcemaps.write())
-    .pipe(gulp.dest(path.DEST_BUILD))
-});
+// gulp.task('webpack', [], () => {
+//   return gulp.src(path.ALL)
+//     .pipe(sourcemaps.init())
+//     .pipe(stream(webpackConfig))
+//     .pipe(uglify()) // minification
+//     .pipe(sourcemaps.write())
+//     .pipe(gulp.dest(path.DEST_BUILD))
+// });

@@ -16,7 +16,7 @@ class DBHelper {
     return `http://localhost:${port}/restaurants`;
   }
   static get DATABASE_VERSION() {
-    return 5;
+    return 1;
   }
 
   static fetchError(err, asset) {
@@ -26,22 +26,27 @@ class DBHelper {
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
-   
+    // Try to fetch from server first.
+    // If the data are there, add to the database. 
+    // If the server fails, use the stored data 
     fetch(DBHelper.DATABASE_URL, {
-        method: 'GET'
-      })
-      .then(response => response.json())
+      method: 'GET'
+    }).then(response => response.json())
       .then(data => {
-        // take network data and store in local DB
+        // take fresh network data and store in local DB
         DBHelper.createDb(data);
         callback(null, data);
-      })
-      .catch(error => {
-          // if offline, use DB data
-          DBHelper.getDbData((error, data) => {
-            callback(null, data);
-          });
-          DBHelper.fetchError(error, 'restaurant data');
+      }).catch(() => {
+        let idb = indexedDB.open(DBHelper.REST_DB, DBHelper.DATABASE_VERSION);
+        idb.onsuccess = e => {
+          let db = e.target.result;
+          let tx = db.transaction(DBHelper.REST_STORE);
+          let store = tx.objectStore(DBHelper.REST_STORE);
+          let request = store.getAll();
+          request.onsuccess = () => {
+            callback(null, request.result);
+          }
+        }
       });
   }
   /**
@@ -191,51 +196,19 @@ class DBHelper {
       console.error(`ERROR (${error}) when trying to create database.`);
     };
 
-    idb.onupgradeneeded = () => {
-      let db = idb.result;
+    idb.onupgradeneeded = evt => {
+      let db = evt.target.result;
       let store = db.createObjectStore(DBHelper.REST_STORE, {
         keyPath: 'id'
       });
-      let index = store.createIndex('byId', 'id');
+      store.createIndex('byId', 'id');
+      store.transaction.oncomplete = () => {
+        let reviewStore = db.transaction([DBHelper.REST_STORE], 'readwrite').objectStore(DBHelper.REST_STORE);
+        // take data and place into store
+        for (let i = 0; i < restaurants.length; i++) {
+          reviewStore.put(restaurants[i]);
+        }
+      };
     };
-
-    idb.onsuccess = () => {
-      let db = idb.result;
-      let tx = db.transaction(DBHelper.REST_STORE, 'readwrite');
-      let store = tx.objectStore(DBHelper.REST_STORE);
-      let index = store.index('byId');
-
-      // take data and place into store
-      restaurants.forEach(restaurant => {
-        store.put(restaurant);
-      });
-      // transaction is done.
-      tx.oncomplete = () => {
-        db.close();
-      };
-    }
-
-  }
-  /**
-   * Retrieve data from database.
-   */
-  static getDbData() {
-    let idb = indexedDB.open(DBHelper.REST_DB);
-    idb.onerror = error => {
-      console.error(`ERROR (${error}) when trying to open database.`);
-    };
-    idb.onsuccess = () => {
-      let db = idb.result;
-      let tx = db.transaction(DBHelper.REST_STORE, 'readwrite');
-      let store = tx.objectStore(DBHelper.REST_STORE);
-      let data = store.getAll();
-      data.onsuccess = () => {
-        return data.result;
-      };
-      // transaction is done.
-      tx.oncomplete = () => {
-        db.close();
-      };
-    }
   }
 }
