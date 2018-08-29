@@ -27,11 +27,11 @@ class DBHelper {
    */
   static fetchRestaurants(callback) {
     // Try to fetch from server first.
-    // If the data are there, add it to the database. 
+    // If the data are there, add to the database. 
     // If the server fails, use the stored data 
     fetch(DBHelper.DATABASE_URL, {
-        method: 'GET'
-      }).then(response => response.json())
+      method: 'GET'
+    }).then(response => response.json())
       .then(data => {
         // take fresh network data and store in local DB
         DBHelper.createDb(data);

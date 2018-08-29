@@ -8,7 +8,7 @@ const registerServiceWorker = () => {
       console.log('Service worker is now registered.');
     })
     .catch((error) => {
-      console.log(`Service worker did NOT register, because ${error}.`);
+      console.error(`Service worker did NOT register, because ${error}.`);
     });
 };
 
