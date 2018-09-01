@@ -392,6 +392,7 @@
         "name": "Casa Enrique",
         "neighborhood": "Queens",
         "address": "5-48 49th Ave, Queens, NY 11101",
+        "photograph": "10",
         "latlng": {
           "lat": 40.743394,
           "lng": -73.954235
