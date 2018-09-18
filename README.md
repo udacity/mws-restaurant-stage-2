@@ -6,10 +6,10 @@ Developed by [Melanie Archer](https://github.com/mejarc/mws-restaurant-stage-2.g
 
 A static webpage incrementally converted to a mobile-ready web application.
 
-In **Stage One**, the enhancements included:
-* conversion to responsive design
-* screen reader accessibility features
-* adding a service worker to cache content.
+In **Stage Two**, the additions are:
+* using the Gulp toolkit to handle image compression and asset concatenation
+* saving data from a server to a browser-side IndexedDB database
+* removing duplicate JavaScript functions
 
 ### Installation and usage
 * [Clone or download the data client repo](https://github.com/mejarc/mws-restaurant-stage-2.git)
@@ -23,6 +23,10 @@ and then
 ```shell
 grunt
 ```
+and *then*
+````shell
+gulp build
+````
 to complete installation.
 
 ----
@@ -30,7 +34,7 @@ to complete installation.
 Now you will start an HTTP server on your local computer. 
 * First, go to the appropriate folder in the code:
 ````shell
-cd ./src
+cd ./dist
 ````
 One method to start the server is to use a simple Python tool that you probably already have installed on your computer. Try the following:
 
