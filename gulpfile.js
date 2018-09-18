@@ -6,13 +6,7 @@ var del = require('del');
 var babel = require('gulp-babel');
 var uglify = require('gulp-uglify');
 var imagemin = require('gulp-imagemin');
-// var gutil = require('gulp-util');
-// var browserSync = require('browser-sync').create();
-// var webpack = require('webpack');
-// var WebpackDevServer = require('webpack-dev-server');
-// var webpackConfig = require('./webpack.config.js');
-// var stream = require('webpack-stream');
- 
+
 var paths = {
   styles: {
     src: 'src/css/**/*.css',
@@ -54,6 +48,7 @@ function styles() {
 }
 
 // transpile JS; concatentate; minify; copy to /dist/js
+// TODO: fix error in all.min.js, when restaurant ID is absent
 function scripts() {
   return gulp.src(paths.scripts.src)
     .pipe(sourcemaps.init())
@@ -102,7 +97,7 @@ function assets() {
     .pipe(gulp.dest(paths.html.dest));
 }
 
-// TODO: make this work
+// TODO: make this work. The individual tasks are fine.
 function build() {
   return gulp.src(paths.html.src)
   .pipe(clean)
@@ -129,26 +124,3 @@ exports.html = html;
 exports.images = images;
 exports.assets = assets;
 exports.build = build;
-
-// gulp.task('browserSync', () => {
-//   browserSync.init({
-//     server: {
-//       baseDir: 'src'
-//     }
-//   });
-// });
-
-// gulp.task('watch', ['browserSync'], () => {
-//   gulp.watch('src/js/**/*.js', browserSync.reload);
-//   gulp.watch('src/*.html', browserSync.reload);
-//   gulp.watch('src/css/**/*.css', browserSync.reload);
-// });
-
-// gulp.task('webpack', [], () => {
-//   return gulp.src(path.ALL)
-//     .pipe(sourcemaps.init())
-//     .pipe(stream(webpackConfig))
-//     .pipe(uglify()) // minification
-//     .pipe(sourcemaps.write())
-//     .pipe(gulp.dest(path.DEST_BUILD))
-// });
