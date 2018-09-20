@@ -7,7 +7,7 @@ Developed by [Melanie Archer](https://github.com/mejarc/mws-restaurant-stage-2.g
 A static webpage incrementally converted to a mobile-ready web application.
 
 In **Stage Two**, the additions are:
-* using the Gulp toolkit to handle image compression and asset concatenation
+* using the Gulp toolkit to handle image and asset compression
 * saving data from a server to a browser-side IndexedDB database
 * removing duplicate JavaScript functions
 
@@ -23,7 +23,7 @@ and then
 ```shell
 grunt
 ```
-and *then*
+and then
 ````shell
 gulp build
 ````
