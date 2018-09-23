@@ -127,8 +127,13 @@ const createReviewHTML = (review) => {
 const fillBreadcrumb = (restaurant = self.restaurant) => {
   const breadcrumb = document.getElementById('breadcrumb');
   const li = document.createElement('li');
+  const previousPage = document.querySelector('[aria-current]');
   li.innerHTML = restaurant.name;
   li.setAttribute('role', 'listitem');
+  if (previousPage){
+    previousPage.removeAttribute('aria-current');
+    li.setAttribute('aria-current', 'page');
+  }
   breadcrumb.appendChild(li);
 };
 
