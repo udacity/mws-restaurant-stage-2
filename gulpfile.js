@@ -79,7 +79,8 @@ function assets() {
   let files = [
     'src/manifest.json',
     'src/favicon*.*',
-    'src/icons*.*'
+    'src/icons*.*',
+    'src/sw.js'
   ];
   return (gulp.src(files, {
       base: 'src/'

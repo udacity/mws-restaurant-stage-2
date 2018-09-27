@@ -77,6 +77,10 @@ object {
   top: -9999px;
 }
 
+[role=status] {
+  font-size: 1.75em;
+  padding: .25em .5em;
+}
 /* ====================== Main ====================== */
 
 #maincontent {
