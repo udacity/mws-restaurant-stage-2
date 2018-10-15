@@ -3,6 +3,10 @@ var del = require('del');
 var sourcemaps = require('gulp-sourcemaps');
 var babel = require('gulp-babel');
 var imagemin = require('gulp-imagemin');
+var cleanCSS = require('gulp-clean-css');
+var concatCSS = require('gulp-concat-css');
+var useref = require('gulp-useref');
+
 var paths = {
   styles: {
     src: 'src/css/**/*.css',
@@ -31,30 +35,40 @@ gulp.task('default', [
   'stage-1-default'
 ]);
 
-// utility. Delete previous build
+// utility. Delete any previous Gulp build.
 function clean() {
-  return del(['dist']);
+  return del(['dist']).then(result => {
+    console.log(`Successfully deleted /dist`);
+  }, reason => {
+    console.log(`'clean' task failed because ${reason}`);
+  });
 }
 
-// copy CSS to /dist/css
+// concatenate, minify, and copy CSS to /dist/css
 function styles() {
   return (gulp.src(paths.styles.src))
+    .pipe(concatCSS('all.min.css'))
+    .pipe(cleanCSS({
+      debug: true
+    }, (details) => {
+      console.log(`Original size of ${details.name}: ${details.stats.originalSize}`);
+      console.log(`Compressed size of ${details.name}: ${details.stats.minifiedSize}`)
+    }))
     .pipe(gulp.dest(paths.styles.dest));
 }
 
 // transpile JS; copy to /dist/js
 function scripts() {
   return gulp.src(paths.scripts.src)
-    .pipe(sourcemaps.init())
     .pipe(babel({
       presets: ['@babel/env']
     }))
-    .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(paths.scripts.dest));
 }
-// copy HTML to /dist
+// change link to CSS; copy HTML to /dist
 function html() {
   return (gulp.src(paths.html.src))
+    .pipe(useref())
     .pipe(gulp.dest(paths.html.dest));
 }
 

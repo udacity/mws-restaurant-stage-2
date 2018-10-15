@@ -11,8 +11,7 @@ var contentCache = [
   './manifest.json',
   './icons-192.png',
   './icons-512.png',
-  'css/styles.css',
-  'css/normalize.css'
+  'css/all.min.css'
 ];
 var staticCacheName = 'stage-2-restaurants';
 var imagesCacheName = 'stage-2-content-images';
