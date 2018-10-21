@@ -11,7 +11,8 @@ var contentCache = [
   './manifest.json',
   './icons-192.png',
   './icons-512.png',
-  'css/all.min.css'
+  'css/all.min.css',
+  './placeholder.png'
 ];
 var staticCacheName = 'stage-2-restaurants';
 var imagesCacheName = 'stage-2-content-images';
@@ -76,13 +77,17 @@ if (self.state === 'activated') {
 // are intercepted and handled differently.
 self.addEventListener('fetch', event => {
   var requestUrl = new URL(event.request.url);
-  if (requestUrl.pathname.includes('img/')) {
-    event.respondWith(serveImage(event.request));
-    return;
+  // only intercept fetch requests for app,
+  // not 3rd party fetch
+  if (requestUrl.origin === location.origin) {
+    if (requestUrl.pathname.includes('img/')) {
+      event.respondWith(serveImage(event.request));
+      return;
 
-  } else if (requestUrl.pathname.endsWith('.html')) {
-    event.respondWith(DBHelper.fetchRestaurants(null));
-    return;
+    } else if (requestUrl.pathname.endsWith('.html')) {
+      event.respondWith(DBHelper.fetchRestaurants(null));
+      return;
+    }
   }
 
 

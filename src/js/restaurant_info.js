@@ -26,6 +26,7 @@ const fetchRestaurantFromURL = (callback) => {
       }
       fillRestaurantHTML();
       callback(null, restaurant);
+      lazyLoadImages();
     });
   }
 };

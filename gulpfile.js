@@ -49,7 +49,7 @@ function styles() {
   return (gulp.src(paths.styles.src))
     .pipe(concatCSS('all.min.css'))
     .pipe(cleanCSS({
-      debug: true
+      level: 2
     }, (details) => {
       console.log(`Original size of ${details.name}: ${details.stats.originalSize}`);
       console.log(`Compressed size of ${details.name}: ${details.stats.minifiedSize}`)
@@ -94,7 +94,8 @@ function assets() {
     'src/manifest.json',
     'src/favicon*.*',
     'src/icons*.*',
-    'src/sw.js'
+    'src/sw.js',
+    'src/placeholder.png'
   ];
   return (gulp.src(files, {
       base: 'src/'

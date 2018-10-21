@@ -19,21 +19,27 @@ const createRestaurantImages = (restaurant, format) => {
   /* default image; the largest */
   const image = document.createElement('img');
   const picture = document.createElement('picture');
-  image.className = 'restaurant-img';
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  image.className = 'restaurant-img lazy';
+  /* load placeholder image first; add real image source only
+     when in view */
+  image.src = 'placeholder.png';
+  /* add attributes placeholder for lazy-loading script to
+     access */
+  image.setAttribute('data-src', DBHelper.imageUrlForRestaurant(restaurant));
   image.setAttribute('alt', restaurant.name);
+
   if (format === 'home') {
     /* When the viewport permits a grid of several items 
       placed horizontally, use the *smaller* image
     */
     picture.innerHTML = `
-   <source media="(min-width: 585px)" srcset="img/${restaurant.id}-thumb.jpg">
-   <source media="(max-width: 584px") srcset="img/${restaurant.id}-small.jpg">
+   <source class="lazy" srcset="${image.src}" media="(min-width: 585px)" data-src="img/${restaurant.id}-thumb.jpg">
+   <source class="lazy" srcset="${image.src}" media="(max-width: 584px") data-src="img/${restaurant.id}-small.jpg">
  `;
   } else {
     picture.innerHTML = `
-    <source media="(max-width: 500px)" srcset="img/${restaurant.id}-thumb.jpg">
-    <source media="(min-width: 501px) and (max-width: 600px") srcset="img/${restaurant.id}-small.jpg">
+    <source media="(max-width: 500px)" srcset="${image.src}" data-src="img/${restaurant.id}-thumb.jpg">
+    <source media="(min-width: 501px) and (max-width: 600px") srcset="${image.src}" data-src="img/${restaurant.id}-small.jpg">
   `;
   }
   picture.append(image);
@@ -63,8 +69,8 @@ const initMaps = (format) => {
       }
     );
   }
-// If not the home page, return a map
-// marking the location of a single restaurant
+  // If not the home page, return a map
+  // marking the location of a single restaurant
   return (
     window.initMap = () => {
       fetchRestaurantFromURL((error, restaurant) => {
@@ -82,4 +88,35 @@ const initMaps = (format) => {
       });
     }
   );
+};
+
+/* Lazy load restaurant images using `IntersectionObserver`.
+ * see: https://developers.google.com/web/fundamentals/performance/lazy-loading-guidance/images-and-video/
+ */
+const lazyLoadImages = () => {
+  let lazyImages = [].slice.call(document.querySelectorAll('.lazy'));
+  if ('IntersectionObserver' in window) {
+    // No version of Safari or IE currently supports. See: https://caniuse.com/#search=IntersectionObserver
+    let lazyImageObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          let lazyImage = entry.target;
+          if (lazyImage.srcset) {
+            lazyImage.srcset = lazyImage.dataset.src;
+          } else {
+            lazyImage.src = lazyImage.dataset.src;
+          }
+          lazyImage.classList.remove('lazy');
+          lazyImageObserver.unobserve(lazyImage);
+        }
+      });
+    });
+    lazyImages.forEach(lazyImage => {
+      lazyImageObserver.observe(lazyImage);
+    });
+  }
+  // fallback? It'd go here.
+  else {
+    console.log(`no IntersectionObserver object in this browser.`);
+  }
 };

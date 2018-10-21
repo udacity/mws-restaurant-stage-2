@@ -121,6 +121,7 @@ const fillRestaurantsHTML = (restaurants = self.restaurants) => {
     ul.append(createRestaurantHTML(restaurant));
   });
   addMarkersToMap();
+  lazyLoadImages();
 };
 
 /**
