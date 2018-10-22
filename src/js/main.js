@@ -4,7 +4,7 @@ let restaurants,
 var map;
 var markers = [];
 
-
+let staticMap = document.getElementById('static');
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
@@ -15,6 +15,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
   document.querySelector('nav h1').focus();
 });
 
+staticMap.addEventListener('click', () => {
+  toggleMap('home');
+});
 /**
  * Fetch all neighborhoods and set their HTML.
  */

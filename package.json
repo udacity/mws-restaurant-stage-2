@@ -39,7 +39,6 @@
   },
   "dependencies": {
     "grunt-responsive-images": "^0.1.6",
-    "gulp-rename": "^1.4.0",
     "idb": "^2.1.3"
   }
 }

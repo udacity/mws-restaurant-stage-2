@@ -1,10 +1,14 @@
 let restaurant,
     map;
 
+let staticMap = document.getElementById('static');
 /**
  * Initialize Google map, called from HTML.
  */
-// todo: add event listener
+staticMap.addEventListener('click', () => {
+  toggleMap();
+});
+
 initMaps(null);
 /**
  * Get current restaurant from page URL.
