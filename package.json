@@ -12,7 +12,8 @@
   },
   "scripts": {
     "debug": "node debug app.js",
-    "start": "node app.js"
+    "start": "node app.js",
+    "build": "babel ES6 -d ES5"
   },
   "main": "app.js",
   "repository": {
@@ -21,5 +22,16 @@
   },
   "author": "Brandy Lee Camacho",
   "linkedIn": "https://www.linkedin.com/in/brandycamacho/",
-  "email": "brandy@udacity.com"
+  "email": "brandy@udacity.com",
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "babel-cli": "^6.16.0",
+    "babel-preset-es2015": "^6.16.0",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^6.0.0",
+    "gulp-babel": "^8.0.0",
+    "idb": "^2.1.3",
+    "nodemon": "^1.18.4"
+  }
 }

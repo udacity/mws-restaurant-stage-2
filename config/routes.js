@@ -35,6 +35,7 @@ module.exports.routes = {
   // '/': {
   //   view: 'homepage'
   // }
+  // 'get /restaurants': { 'RestaurantsController.index'}
 
   /***************************************************************************
   *                                                                          *
