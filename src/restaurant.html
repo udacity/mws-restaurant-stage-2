@@ -2,7 +2,7 @@
 <html lang="en-US">
 
 <head>
-    <!-- build:css css/all.min.css -->
+    <!-- build:css css/all.css -->
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/styles.css">
     <!-- endbuild -->
@@ -34,7 +34,10 @@
   <main id="maincontent">
     <!-- Beginning map -->
     <section id="map-container">
-      <div id="map" role="application" aria-live="polite" aria-label="Map of restaurants"></div>
+        <img id="static" class="visible" onclick="toggleMap()" src="https://maps.googleapis.com/maps/api/staticmap?center=40.722216,-73.987501&zoom=12&size=800x400&f&markers=color:red%7C40.713829,-73.989667&markers=color:red%7C40.683555,-73.966393&markers=color:red%7C40.747143,-73.985414&markers=color:red%7C40.722216,-73.987501&markers=color:red%7C40.705089,-73.933585&markers=color:red%7C40.674925,-74.016162&markers=color:red%7C40.727397,-73.983645&markers=color:red%7C40.726584,-74.002082&markers=color:red%7C40.743797,-73.950652&markers=color:red%7C40.743394,-73.954235&key=AIzaSyAURfEVsYXdwPpIKjqS2SN87hs01L1TgTI" alt="Static map of restaurants. Click on this image to load dynamic version.">
+        
+        <div id="map" class="hidden" role="application" aria-live="polite" aria-label="Map of restaurants"></div>
+      
     </section>
     <!-- End map -->
     <!-- Beginning restaurant -->

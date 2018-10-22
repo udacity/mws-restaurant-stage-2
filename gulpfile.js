@@ -47,7 +47,7 @@ function clean() {
 // concatenate, minify, and copy CSS to /dist/css
 function styles() {
   return (gulp.src(paths.styles.src))
-    .pipe(concatCSS('all.min.css'))
+    .pipe(concatCSS('all.css'))
     .pipe(cleanCSS({
       level: 2
     }, (details) => {
@@ -118,6 +118,7 @@ function build() {
   scripts();
   images();
   assets();
+
 }
 
 exports.clean = clean;

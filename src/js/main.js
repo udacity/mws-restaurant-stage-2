@@ -73,6 +73,7 @@ const fillCuisinesHTML = (cuisines = self.cuisines) => {
 /**
  * Initialize Google map, called from HTML.
  */
+// todo: add event listener
 initMaps('home');
 /**
  * Update page and map for current restaurants.

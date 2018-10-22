@@ -4,6 +4,7 @@ let restaurant,
 /**
  * Initialize Google map, called from HTML.
  */
+// todo: add event listener
 initMaps(null);
 /**
  * Get current restaurant from page URL.

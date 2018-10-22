@@ -77,6 +77,14 @@ object {
   top: -9999px;
 }
 
+.visible {
+  display: block;
+}
+
+.hidden {
+  display: none;
+}
+
 [role=status] {
   font-size: 1.75em;
   padding: .25em .5em;
@@ -161,12 +169,15 @@ nav h1 a {
 
 /* ====================== Map ====================== */
 
-#map {
+#map, #static {
   height: 400px;
   width: 100%;
   background-color: #ccc;
 }
 
+#static {
+  object-fit: cover;
+}
 /* ====================== Restaurant Filtering ====================== */
 
 .filter-options {
@@ -404,7 +415,8 @@ nav h1 a {
       top: 80px;
       width: 50%;
     }
-    .inside #map {
+    .inside #map,
+    .inside #static {
       height: 100%;
     }
   }

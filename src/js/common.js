@@ -45,6 +45,21 @@ const createRestaurantImages = (restaurant, format) => {
   picture.append(image);
   return picture;
 };
+/** 
+ * Show live Google Maps upon user preference (click)
+ */
+const toggleMap = (format) => {
+  let staticMap = document.getElementById('static');
+  let map = document.getElementById('map');
+
+  if (map.className === 'hidden') {
+    staticMap.className = 'hidden';
+    map.className = 'visible';
+  }
+  else {
+    map.className = 'hidden';
+  }
+};
 
 /**
  * Initialize Google map, called from HTML.
