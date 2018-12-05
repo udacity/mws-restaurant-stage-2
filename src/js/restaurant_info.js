@@ -71,6 +71,7 @@ fetchRestaurantFromURL = (callback) => {
         return;
       }
       fillRestaurantHTML();
+      fillMetaDesc();
       callback(null, restaurant)
     });
   }
@@ -224,4 +225,8 @@ getParameterByName = (name, url) => {
   if (!results[2])
     return '';
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
+fillMetaDesc = (restaurant = self.restaurant) => {
+  document.querySelector('meta[name=description]').setAttribute("content","Review of " +restaurant.name);
 }

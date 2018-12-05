@@ -55,10 +55,12 @@ class DBHelper {
           store.put(restaurant);
         });
         // On Transaction complete -> Close DB
-        tx.oncomplete = function() {
+        tx.oncomplete = (event) => {
+          console.log("Transaction Completed: " + event)
           db.close();
         };
       }
+      console.log(dbPromise);
   }
 
   /**
@@ -66,26 +68,29 @@ class DBHelper {
    */
   static fetchRestaurants(callback) {
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', DBHelper.DATABASE_URL);
-    xhr.onerror = () => {
-      DBHelper.getCachedData((restaurants) => {
-        if(restaurants.length > 0){
-          console.log("Unable to reach server. Currently using cached data.")
+    console.log(navigator.onLine);
+    if(navigator.onLine) {
+      xhr.open('GET', DBHelper.DATABASE_URL);
+      xhr.onload = () => {
+        if (xhr.status === 200) { // Got a success response from server!
+          const restaurantsJSON  = JSON.parse(xhr.responseText);
+          DBHelper.createDB(restaurantsJSON); // Cache restaurant in IDB
+          callback(null, restaurantsJSON);
+        } else { // Oops!. Got an error from server.
+          const error = (`Request failed. Returned status of ${xhr.status}`);
+          callback(error, null);
+        }
+      };
+      xhr.send();
+    } else {
+      console.log("Unable to reach server. Currently using cached data.")
+      DBHelper.getCachedData((error, restaurants) => {
+        console.log(restaurants.length);
+        if(restaurants.length > 0){          
           callback(null, restaurants);
         }
       })
     }
-    xhr.onload = () => {
-      if (xhr.status === 200) { // Got a success response from server!
-        const restaurantsJSON  = JSON.parse(xhr.responseText);
-        DBHelper.createDB(restaurantsJSON); // Cache restaurant in IDB
-        callback(null, restaurantsJSON);
-      } else { // Oops!. Got an error from server.
-        const error = (`Request failed. Returned status of ${xhr.status}`);
-        callback(error, null);
-      }
-    };
-    xhr.send();
   }
 
   /**
@@ -234,7 +239,7 @@ class DBHelper {
     return marker;
   } */
 
-  static getCachedData(results){
+  static getCachedData(callback){
     // Start a new DB transaction
     var dbPromise = DBHelper.openDB();
     dbPromise.onsuccess = function() {
@@ -243,6 +248,11 @@ class DBHelper {
       var store = tx.objectStore("RestaurantObjectStore");
        // get cached restaurants from DB
       var cached = store.getAll();
+
+      cached.onsuccess = () => {
+        callback(null, cached.result);
+      }
+
        // Close the db when the transaction is done
       tx.oncomplete = function() {
           db.close();
