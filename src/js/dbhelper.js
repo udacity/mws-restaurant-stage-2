@@ -1,6 +1,11 @@
 /**
  * Common database helper functions.
  */
+
+if (!window.indexedDB) {
+  console.log("Your browser doesn't support a stable version of IndexedDB. Such and such feature will not be available.");
+}
+
 class DBHelper {
 
   /**
@@ -13,6 +18,13 @@ class DBHelper {
   }
 
   /**
+   * Create IDB
+   **/
+  static createDB(restaurants) {
+    var dbPromise = window.indexedDB.open('restaurantDB');
+   }
+
+  /**
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
@@ -20,9 +32,9 @@ class DBHelper {
     xhr.open('GET', DBHelper.DATABASE_URL);
     xhr.onload = () => {
       if (xhr.status === 200) { // Got a success response from server!
-        const json = JSON.parse(xhr.responseText);
-        const restaurants = json.restaurants;
-        callback(null, json);
+        const restaurantsJSON  = JSON.parse(xhr.responseText);
+        DBHelper.createDB(restaurantsJSON); // Cache restaurant in IDB
+        callback(null, restaurantsJSON);
       } else { // Oops!. Got an error from server.
         const error = (`Request failed. Returned status of ${xhr.status}`);
         callback(error, null);
