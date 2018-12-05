@@ -5,11 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="UTF-8">
   <meta name="Description" content="Restaurant Reviews">
+  <meta name="theme-color" content="#3397DB"/>
   <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
   <link rel="stylesheet" type="text/css" href="css/styles.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin=""/>
   <link rel="preconnect" href="https://maps.gstatic.com">
   <link rel="preconnect" href="https://fonts.google.com">
+  <link rel="manifest" href="/manifest.json">
   <title>Restaurant Reviews</title>
 </head>
 
@@ -28,11 +30,11 @@
       <div class="filter-options" role="search" aria-label="filters" id="filter">
         <h2>Filter Results</h2>
         <div class="filters">
-          <select aria-label="Neighborhoods" id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()">
-            <option value="all" label="All Neighborhoods">All Neighborhoods</option>
+          <select aria-label="Neighborhoods" aria-labelledby="neighborhoods-options"  id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()">
+            <option value="all" id="neighborhoods-options" label="All Neighborhoods">All Neighborhoods</option>
           </select>
-          <select aria-label="Cuisines" id="cuisines-select" name="cuisines" onchange="updateRestaurants()">
-            <option value="all">All Cuisines</option>
+          <select aria-label="Cuisines" id="cuisines-select" aria-labelledby="cuisines-options" name="cuisines" onchange="updateRestaurants()">
+            <option value="all" id="cuisines-options" >All Cuisines</option>
           </select>
         </div>
       </div>
@@ -43,6 +45,7 @@
   <script type="application/javascript" charset="utf-8" src="js/dbhelper.js"></script>
   <script type="application/javascript" charset="utf-8" src="js/main.js"></script>
   <script type="application/javascript" charset="utf-8" src="js/sw_registration.js"></script>
+  <script type="application/javascript" charset="utf-8" src="js/optimization.js"></script>
   <!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places&callback=initMap"></script> -->
 
 

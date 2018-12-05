@@ -163,7 +163,7 @@ createRestaurantHTML = (restaurant) => {
   li.append(article);
 
   const image = document.createElement('img');
-  image.className = 'restaurant-img lazy-load-img';
+  image.className = 'restaurant-img lazy-img';
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
   image.alt = restaurant.name;
   article.append(image);
