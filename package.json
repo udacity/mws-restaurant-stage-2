@@ -5,10 +5,19 @@
   "description": "a Sails application",
   "keywords": [],
   "dependencies": {
+    "browser-sync": "^2.26.3",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^6.0.0",
+    "gulp-clean-css": "^4.0.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-eslint": "^5.0.0",
+    "gulp-sourcemaps": "^2.6.4",
+    "gulp-terser": "^1.1.6",
+    "gulp-uglify": "^3.0.1",
     "include-all": "^1.0.0",
     "rc": "1.0.1",
-    "sails": "^0.12.13",
-    "sails-disk": "~0.10.9"
+    "sails": "^0.12.14",
+    "sails-disk": "^0.10.10"
   },
   "scripts": {
     "debug": "node debug app.js",
