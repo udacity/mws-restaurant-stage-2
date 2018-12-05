@@ -17,12 +17,49 @@ class DBHelper {
     return `http://localhost:${port}/restaurants`;
   }
 
+
+  /**
+   * 
+   * Open DB 
+   */
+  static openDB(dbOpen){
+     // Makes sure indexedDB works across different browsers
+     var indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB || window.shimIndexedDB;
+    // Open / Create DB
+     return indexedDB.open("restaurantDB", 1);
+  }
+
   /**
    * Create IDB
    **/
   static createDB(restaurants) {
-    var dbPromise = window.indexedDB.open('restaurantDB');
-   }
+    var dbPromise = DBHelper.openDB();
+
+     // Open (or create) restaurant database
+     var dbPromise = indexedDB.open("restaurantDB", 1);
+      dbPromise.onupgradeneeded = function() {
+       var db = dbPromise.result;
+       var store = db.createObjectStore("RestaurantObjectStore", {keyPath: "id"});
+       var index = store.createIndex("by-id", "id");
+     }
+      dbPromise.onerror = function() {
+       console.log("IndexedDB cannot be Created");
+     }
+      dbPromise.onsuccess = function() {
+        // Start a new transaction
+        var db = dbPromise.result;
+        var tx = db.transaction("RestaurantObjectStore", "readwrite");
+        var store = tx.objectStore("RestaurantObjectStore");
+        // Store restaurants in DB
+        restaurants.forEach(function(restaurant){
+          store.put(restaurant);
+        });
+        // On Transaction complete -> Close DB
+        tx.oncomplete = function() {
+          db.close();
+        };
+      }
+  }
 
   /**
    * Fetch all restaurants.
@@ -30,6 +67,14 @@ class DBHelper {
   static fetchRestaurants(callback) {
     let xhr = new XMLHttpRequest();
     xhr.open('GET', DBHelper.DATABASE_URL);
+    xhr.onerror = () => {
+      DBHelper.getCachedData((restaurants) => {
+        if(restaurants.length > 0){
+          console.log("Unable to reach server. Currently using cached data.")
+          callback(null, restaurants);
+        }
+      })
+    }
     xhr.onload = () => {
       if (xhr.status === 200) { // Got a success response from server!
         const restaurantsJSON  = JSON.parse(xhr.responseText);
@@ -188,6 +233,22 @@ class DBHelper {
     );
     return marker;
   } */
+
+  static getCachedData(results){
+    // Start a new DB transaction
+    var dbPromise = DBHelper.openDB();
+    dbPromise.onsuccess = function() {
+      var db = dbPromise.result;
+      var tx = db.transaction("RestaurantObjectStore", "readwrite");
+      var store = tx.objectStore("RestaurantObjectStore");
+       // get cached restaurants from DB
+      var cached = store.getAll();
+       // Close the db when the transaction is done
+      tx.oncomplete = function() {
+          db.close();
+      };
+    }
+  }
 
 }
 
